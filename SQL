@@ -76,6 +76,7 @@ Question:-
                             2.henry (ID 2, Salary 80,000, Manager ID 4):
                                Manager: max (ID 4, Salary 90,000)
                                henry.salary (80,000) < max.salary (90,000) → Not included in the result.
+                                beacuse henry have manager_id but(less salary) and max have not manager_id.
                             3.sem (ID 3, No manager).
                             4.max (ID 4, No manager).      
 
