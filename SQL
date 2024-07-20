@@ -1,5 +1,6 @@
 #Self Join :-
-            A self join is a regular join that is used to join a table with itself. It basically allows us to combine the rows from the same table based on some specific conditions.
+            A self join is a regular join that is used to join a table with itself.
+            It basically allows us to combine the rows from the same table based on some specific conditions.
             It is very useful and easy to work with, and it allows us to retrieve data or information which involves comparing records within the same table.
  Syntax:-
            select columns name
@@ -69,7 +70,7 @@ Question:-
                       WHERE e1.salary > e2.salary: Filters the results to include only those employees whose salary is greater than their manager’s salary.
                       
        Example Analysis:
-                           1.joy (ID 1, Salary 70,000, Manager ID 3):
+                           1.joe (ID 1, Salary 70,000, Manager ID 3):
                                Manager: sem (ID 3, Salary 60,000)
                                joe.salary (70,000) > sem.salary (60,000) → Included in the result.
                             2.henry (ID 2, Salary 80,000, Manager ID 4):
