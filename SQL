@@ -1,0 +1,91 @@
+#Self Join :-
+            A self join is a regular join that is used to join a table with itself. It basically allows us to combine the rows from the same table based on some specific conditions.
+            It is very useful and easy to work with, and it allows us to retrieve data or information which involves comparing records within the same table.
+ Syntax:-
+           select columns name
+           from table as t1
+           join table as t2
+           on t1.matching_column=t2.matching_column
+           order by column name;
+
+Question:-
+          write an sql query to find the employee who earn more than their manager?
+
+          Table employee :
+                          +---------------+-----------+
+                          |  column_name  |    type   |
+                          +---------------+-----------+
+                          |    id         |     int   |
+                          |   name        |   varchar |
+                          |   salary      |    int    |
+                          |   manager_id  |    int    |
+                          +---------------+-----------+
+
+                         1. id: Unique identifier for each employee.
+                         2.name: Name of the employee.
+                         3.Salary: Salary of the employee.
+                         4.manager_id: Identifier of the employee's manager.
+                          
+                         id is the primary key for this table.
+                         each row of this table indicate the id of the employee,their name,salary and id of their manager.
+                         
+                Input:                                      
+                          +-------+----------+--------+-----------+
+                          |  id   |  name    | salary | manager_id|
+                          +-------+----------+--------+-----------+
+                          |   1   | joe      | 70000  |   3       |
+                          |   2   | henry    | 80000  |   4       |
+                          |   3   | sem      | 60000  |  null     |
+                          |   4   | max      | 90000  |  null     |
+                          +-------+----------+--------+-----------+
+                          
+  explanation:
+                 Use a self-join to match each employee with their manager.
+                 
+                                  employee as e1                                        employee as e2
+   
+                          +-------+----------+--------+-----------+        +-------+----------+--------+-----------+
+                          |  id   |  name    | salary | manager_id|        | id   |  name    | salary | manager_id |    
+                          +-------+----------+--------+-----------+        +-------+----------+--------+-----------+
+                          |   1   | joe      | 70000  |   3       |        |   1   | joe      | 70000  |   3       |
+                          |   2   | henry    | 80000  |   4       |        |   2   | henry    | 80000  |   4       |
+                          |   3   | sem      | 60000  |  null     |        |   3   | sem      | 60000  |  null     |
+                          |   4   | max      | 90000  |  null     |        |   4   | max      | 90000  |  null     |                         
+                          +-------+----------+--------+-----------|        +-------+----------+--------+-----------+
+                     
+        query:
+
+                        select 
+                        e1.name as employee
+                        from employee as e1 
+                        join employee as e2 
+                        on e1.manager_id=e2.id
+                        where e1.salary> e2.salary;
+
+                      FROM employees e: Aliases the employees table as e1.
+                      
+                      JOIN employees m ON e1.manager_id = e2.id: Joins the table with itself, where the manager_id from the employee table matches the id from the manager table.
+                      
+                      WHERE e1.salary > e2.salary: Filters the results to include only those employees whose salary is greater than their manager’s salary.
+                      
+       Example Analysis:
+                           1.joy (ID 1, Salary 70,000, Manager ID 3):
+                               Manager: sem (ID 3, Salary 60,000)
+                               joe.salary (70,000) > sem.salary (60,000) → Included in the result.
+                            2.henry (ID 2, Salary 80,000, Manager ID 4):
+                               Manager: max (ID 4, Salary 90,000)
+                               henry.salary (80,000) < max.salary (90,000) → Not included in the result.
+                            3.sem (ID 3, No manager).
+                            4.max (ID 4, No manager).      
+
+                            
+        output:
+                         +------------+
+                         | employee   |
+                         +------------+
+                         |    joe     |
+                         +------------+
+
+
+    
+                         
