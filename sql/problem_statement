@@ -1,0 +1,55 @@
+Context:
+
+SocialBuzz is a leading social media platform dedicated to fostering connections and engagement among users through innovative features and community-building tools
+
+Analysing the structure of user connections helps SocialBuzz enhance its algorithms for recommendations and engagement. 
+
+Understanding second-degree followers—users who both follow others and follow themselves—is crucial for identifying active and influential users on the platform.
+
+As an analyst at SocialBuzz, my manager has asked you to identify second-degree followers and count their followers.
+
+This analysis will provide insights into user engagement patterns and help refine the platform's recommendation systems.
+
+Problem Statement:
+
+A second-degree follower is a user follows at least one user, and is followed by at least one user.
+
+Write a query to report the second-degree users and the number of their followers.
+
+Table: follow:
+                   +-----------+-----------+
+                   | followee  | follower  |
+                   +-----------+-----------+
+                   | Alice     |  Bob      |
+                   |  Bob      |  Cena     |
+                   | Bob       | Donald    |
+                   | Donald    | Edward    |
+                   +-----------+-----------+
+
+Query:
+                  select
+                  followee  as follower,
+                  count(*) as num
+                  from follow
+                  where followee in (
+                  select follower
+                  from follow )
+                  group by followee
+                  order by followee
+           
+Sample output:
+                   +---------+--------+
+                   |follower |  num   |
+                   +---------+--------+
+                   | Bob     |   2    |
+                   |Donald   |   1    |
+                   +---------+--------+
+
+
+Explanation:
+
+User Bob has 2 followers. Bob is a second-degree follower because he follows Alice, so we include him in the result table.
+
+User Donald has 1 follower. Donald is a second-degree follower because he follows Bob, so we include him in the result table.
+
+User Alice has 1 follower. Alice is not a second-degree follower because she does not follow anyone, so we don not include her in the result table.
