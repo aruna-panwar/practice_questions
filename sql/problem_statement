@@ -101,3 +101,71 @@ Employee 1 has three events: two on day 2020-11-28 with a total of (32 - 4) + (2
 Employee 2 has two events: one on day 2020-11-28 with a total of (33 - 3) = 30, and one on day 2020-12-09 with a total of (74 - 47) = 27.
 
 
+## Common Table Expression (cte) recursive
+
+Problem Statement:
+
+Given a table "Numbers" with a single column "number," write a query to find the missing numbers in the sequence from 1 to 100 (excluding the ones present in the table).
+
+Table:- Numbers
+
++-------+
+|number |
++-------+
+|   1   |
+|   2   |
+|   4   |
+|   6   |
+|  ...  |
+|   98  |
+|  100  |
++-------+
+
++--------+
+| Result |
++--------+
+| number |
+|   3    |
+|   5    |
+|   7    |
++--------+
+
+
+Query:-  
+         with sequence as(
+         select 1 as number
+         union all
+         select number + 1
+         from sequence
+         where number<100
+         )
+         select s.number
+         from sequence as s 
+         join Number as n
+         on s.number=n.number
+         where n.number is null
+         order by s.number
+
+Explanation:-
+                 we want to generate a list of numbers from 1 to 100. Using a CTE, we can achieve this efficiently with a recursive query
+
+                 WITH Sequence AS: This line begins the definition of the CTE named Sequence.
+
+                 SELECT 1 AS number: The initial part of the CTE, known as the anchor member, starts the sequence with the number 1. This sets the foundation for our sequence.
+
+                 UNION ALL: Combines the result of the anchor member with the recursive member.
+
+                 SELECT number + 1 FROM Sequence: The recursive member. For each row produced by the CTE, it adds 1 to the current number.
+
+                 WHERE number < 100: Ensures that the sequence stops at 100, preventing infinite recursion.
+
+                 Define the Sequence: Generate numbers from 1 to 100 using the CTE.
+
+                 LEFT JOIN: Join the generated sequence with the Numbers table to identify which numbers are present and which are missing.
+
+                 Filter Missing Numbers: Use WHERE n.number IS NULL to filter out the numbers that are present, leaving only the missing ones.
+
+                 Order the Result: Ensure the missing numbers are listed in ascending order.
+
+  
+
