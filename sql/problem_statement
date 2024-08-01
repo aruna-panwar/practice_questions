@@ -225,7 +225,7 @@ Explanation:-
                              | 2019-01  | DE      | 1           | 1              | 2000               | 2000                  |
                              +----------+---------+-------------+----------------+--------------------+-----------------------+
 
-           query:-
+         query:-
 
                              select
                              DATE_FORMAT(trans_date, '%Y-%m') as month,
@@ -235,9 +235,92 @@ Explanation:-
                              sum(amount) as trans_total_amount,
                              sum(if(state = 'approved',amount,0)) as approved_total_amount
                              from transactions
-                             group by country,month
+                             group by country,month  
 
-                     
+
+
+
+                                                                  Human traffic
+
+       
+        **Context:**
+
+                UrbanMall is dedicated to understanding customer traffic patterns to enhance mall operations and optimize resource allocation. 
+                Identifying peak traffic periods where multiple consecutive visits had high attendance is crucial for making strategic decisions on staffing and promotions.
+                As a data analyst at UrbanMall, your task is to identify and report instances where there were three or more consecutive visits with a significant number of people,
+                specifically 100 or more, during each visit.This analysis will help in recognizing patterns of high traffic and planning accordingly.
+
+
+         #Problem Statement:
+
+                  Each row in the table contains the visit_date and visit_id to the mall with the number of people during the visit. 
+                  No two rows will have the same visit_date
+                  Write a query to find and display records where there are three or more consecutive visits with each having at least 100 people.
+
+
+                  Return the columns visit_id, visit_date, and people.
+                  Return the result ordered by visit_date in ascending order.
+
+         Sample Input:
+
+         Table: mall
+  
+                   +-----+------------+-------+
+                   | id  | visit_date | people|
+                   +-----+------------+-------+
+                   | 1   | 2022/07/13 |  50   |
+                   | 2   | 2022/07/14 |  190  | 
+                   | 3   | 2022/07/15 |  20   |
+                   | 4   | 2022/07/16 |  300  |
+                   | 5   | 2022/07/17 |  450  |
+                   | 6   | 2022/07/18 |  600  |
+                   | 7   | 2022/07/19 |  110  |
+                   | 8   | 2022/07/20 |  220  |
+                   +-----+------------+-------|
+                   
+
+
+         query:-
+
+                    with cte as(
+                    select *,
+                    lead(people)over(order by visit_date) as next_people,lead(people,2)over(order by visit_date) as next_n_people,
+                    lag(people)over(order by visit_date) as pre_people,lag(people,2)over(order by visit_date) as pre_n_people
+                    from mall
+                    )
+                    select
+                    id,
+                    visit_date,
+                    people
+                    from cte
+                    where (people>=100 and next_people>=100 and next_n_people)or
+                    (people>=100 and next_people>=100 and next_n_people) or
+                    (people>=100 and pre_people>=100 and next_people)
+
+
+             
+        Sample Output:-
+
+                   +-----+------------+-------+
+                   | id  | visit_date | people|
+                   +-----+------------+-------+
+                   | 4   | 2022/07/16 |  300  |
+                   | 5   | 2022/07/17 |  450  |
+                   | 6   | 2022/07/18 |  600  |
+                   | 7   | 2022/07/19 |  110  |
+                   | 8   | 2022/07/20 |  220  |
+                   +-----+------------+-------+
+
+                              
+
+
+        Sample Explanation:
+
+                             The five rows with ids 4, 5, 6, 7, and 8 have consecutive ids, and each of them has ≥ 100 people attended.
+                             Note that row 5 was included even though the visit_date was not the next day after row 4
+                             ( we check only with consecutive IDs which may and may not be consecutive dates).
+                             The rows with ids 1 and 3 are not included because we need ≥ 100 people.
+                             the row with id 2 was not included because we need three or more rows with consecutive IDs.
 
           
       
