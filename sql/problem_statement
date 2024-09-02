@@ -322,5 +322,12 @@ Explanation:-
                              The rows with ids 1 and 3 are not included because we need ≥ 100 people.
                              the row with id 2 was not included because we need three or more rows with consecutive IDs.
 
-          
+
+    # Query the names of all the Japanese cities in the CITY table. The COUNTRYCODE for Japan is JPN.
+
+     solution:
+               select
+               name
+               from city
+               where COUNTRYCODE="JPN"
       
